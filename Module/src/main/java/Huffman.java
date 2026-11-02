@@ -1,5 +1,8 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.ArrayList;
 
 /**
  * Project 3: Huffman Encoding / Decoding.
@@ -62,8 +65,19 @@ public class Huffman {
      *    character (no combine() call needed).
      */
     public static HuffmanNode createHuffTree(int[] freq) {
-        // TODO: implement
-        return null;
+        Collection<HuffmanNode> lst = new ArrayList<>();
+        for (int i = 0; i < freq.length; i += 1) {
+            if (freq[i] > 0) {
+                HuffmanNode node = new HuffmanNode(i, freq[i], null, null);
+                addNode(lst, node);
+            }
+        }
+        while (lst.size() > 1) {
+            HuffmanNode node1 = removeMin(lst);
+            HuffmanNode node2 = removeMin(lst);
+            addNode(lst, HuffmanNode.combine(node1, node2));
+        }
+        return removeMin(lst);
     }
 
     /**
@@ -81,7 +95,19 @@ public class Huffman {
     public static String[] createCode(HuffmanTree root) {
         String[] codes = new String[NUM_CHARS];
         Arrays.fill(codes, "");
-        // TODO: implement
+        pathCodes(root, "", codes);
+        return codes;
+    }
+
+    public static String[] pathCodes(HuffmanNode root, String path, String[] codes) {
+        if (root == null) {
+            return null;
+        }
+        if (root.left() == null && root.right() == null) {
+            codes[root.charAscii()] = path;
+        }
+        pathCodes(root.left(), path + "0", codes);
+        pathCodes(root.right(), path + "1", codes);
         return codes;
     }
 
@@ -94,8 +120,17 @@ public class Huffman {
      * Example: for the text "aaabbbbcc" this returns "97 3 98 4 99 2".
      */
     public static String createHeader(int[] freq) {
-        // TODO: implement
-        return "";
+        StringBuilder header = new StringBuilder();
+        for (int i = 0; i < freq.length; i += 1) {
+            if (freq[i] > 0) {
+                header.append(i).append(" ").append(freq[i]).append(" ");
+            }
+        }
+        if (header.length() > 0) {
+            int end = header.length() - 1;
+            header.deleteCharAt(end);
+        }
+        return header.toString();
     }
 
     /**
@@ -112,7 +147,21 @@ public class Huffman {
      *    header line (e.g. "97 5") and nothing else - no second line of code bits.
      */
     public static void huffmanEncode(String inFile, String outFile) throws IOException {
-        // TODO: implement
+        Path path = Path.of(inFile);
+        String unCoded = Files.readString(path);
+        int[] freq_table = cntFreq(unCoded);
+        HuffmanNode root = createHuffTree(freq_table);
+        if (root == null) {
+            // write an empty file
+        }
+        String[] codes = createCode(root);
+        String header = createHeader(freq_table);
+        FileWriter file = new FileWriter(outFile);
+        StringBuilder code = new StringBuilder();
+        code.append(header + "\n");
+        for (int i = 0; i < codes.length; i += 1) {
+
+        }
     }
 
     /**
@@ -124,7 +173,15 @@ public class Huffman {
      */
     public static int[] parseHeader(String headerString) {
         int[] freq = new int[NUM_CHARS];
-        // TODO: implement
+        if (headerString == null){
+            return freq;
+        }
+        String[] header_array = headerString.split(" ");
+        for (int i = 0; i < header_array.length; i += 2){
+            int ascii = Integer.parseInt(header_array[i]);
+            int frequency = Integer.parseInt(header_array[i+1]);
+            freq[ascii] = frequency;
+        }
         return freq;
     }
 
@@ -144,6 +201,47 @@ public class Huffman {
      * so write it out that many times directly.
      */
     public static void huffmanDecode(String encodedFile, String decodeFile) throws IOException {
-        // TODO: implement
+        Path path = Path.of(encodedFile);
+        String encoded = Files.readString(path);
+        String[] lines = encoded.split("\n"); // breaks up header, lines
+
+        int[] header = parseHeader(lines[0]); // following lines create the codes
+        HuffmanNode tree = createHuffTree(header);
+        String[] codes = createCode(tree);
+        StringBuilder string = new StringBuilder(); // string that is being read
+        FileWriter file = new FileWriter(decodeFile); // file being written to
+        for (int i = 1; i < lines.length; i += 1) { // excludes header, puts rest of file back together
+            string.append(lines[i]);
+        }
+
+        StringBuilder code = new StringBuilder(); // decoding
+        HuffmanNode spot = tree;
+        for (int i = 0; i < string.length() - extra; i += 1) {
+            if (spot.left() == null || spot.right() == null) {
+                try {
+                    String chr = "";
+                    for (i = 0; i < codes.length; i += 1) {
+                        if (code.equals(codes[i])) {
+                            chr = String.valueOf((char) i);
+                        }
+                    }
+                    file.write(chr);
+                    code = new StringBuilder();
+                } catch (IOException e) {
+                    System.out.println("An error occurred: " + e.getMessage());
+                }
+                if (string.charAt(i) == 0) {
+                    spot = spot.left();
+                    code.append(0);
+                } else {
+                    spot = spot.right();
+                    code.append(1);
+                }
+            }
+            // TODO: Decoding
+            /** files need to be in chunks of 8;
+             * we can just decode the length of the original string
+             * and then add zeros after */
+        }
     }
 }
