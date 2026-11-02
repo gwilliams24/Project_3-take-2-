@@ -34,7 +34,16 @@ public class Huffman {
      */
     public static int[] cntFreq(String filename) throws IOException {
         int[] freq = new int[NUM_CHARS];
-        // TODO: implement
+        try {
+            FileReader fileReader = new FileReader(filename);
+            int i;
+            while ((i = fileReader.read()) != -1) {
+                freq[i] += 1;
+            }
+            fileReader.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         return freq;
     }
 
