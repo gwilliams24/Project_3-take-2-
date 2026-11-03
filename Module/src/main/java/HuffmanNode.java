@@ -12,18 +12,35 @@
 public record HuffmanNode(int charAscii, int freq, HuffmanTree left, HuffmanTree right)
         implements HuffmanTree{
 
+    public int frequency(){
+        return this.freq;
+    }
+
+    public int charascii(){
+        return this.charAscii;
+    }
+
      public boolean comesBefore(HuffmanTree other) {
-         if (this.freq() < other.freq()) {
+         if (this.freq() < other.frequency()) {
              return true;
-         } else if (this.freq() == other.freq()) {
-             return (this.charAscii() < other.charAscii());
+         } else if (this.freq() == other.frequency()) {
+             return (this.charAscii() < other.charascii());
          }
          return false;
     }
 
     public HuffmanTree combine(HuffmanTree other) {
-        // TODO: implement
-        return null;
+        int parentASCII;
+        if (this.charAscii() < other.charascii()) {
+            parentASCII = this.charascii();
+        } else {
+            parentASCII = other.charascii();
+        }
+        if (comesBefore(other)) {
+            return new HuffmanNode(parentASCII, this.freq + other.frequency(), this, other);
+        } else {
+            return new HuffmanNode(parentASCII, this.freq + other.frequency(), other, this);
+        }
     }
 
     /**
