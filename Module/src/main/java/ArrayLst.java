@@ -1,15 +1,15 @@
-public class ArrayList <T> {
+public class ArrayLst<T> {
     T[] array;
     int size;
 
-    public ArrayList(T[] array, int size) {
+    public ArrayLst(T[] array, int size) {
         this.array = array;
         this.size = size;
     }
 
     public boolean equals(Object other) {
         switch (other) {
-            case ArrayList array_other:
+            case ArrayLst array_other:
                 if ((this.size != array_other.size) || (this.array.length != array_other.array.length)) {
                     return false;
                 }

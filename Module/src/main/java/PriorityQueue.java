@@ -1,4 +1,4 @@
-public record PriorityQueue(ArrayList<HuffmanTree> collection) implements HQueue{
+public record PriorityQueue(ArrayLst<HuffmanTree> collection) implements HQueue{
 
     // checks if queue is empty
     public boolean isEmpty(){

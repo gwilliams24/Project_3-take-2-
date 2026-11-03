@@ -1,6 +1,7 @@
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Array;
 import java.util.*;
 import java.util.ArrayList;
 
@@ -65,11 +66,10 @@ public class Huffman {
      *    character (no combine() call needed).
      */
     public static HuffmanTree createHuffTree(int[] freq) {
-        PriorityQueue lst = null;
+        PriorityQueue lst = new PriorityQueue(new ArrayLst<HuffmanTree>(new HuffmanTree[257], 0));
         for (int i = 0; i < freq.length; i += 1) {
             if (freq[i] > 0) {
-                HuffmanNode node = new HuffmanNode(i, freq[i], null, null);
-                lst.enqueue(node);
+                lst.enqueue(new HuffmanLeaf(freq[i], (char) i));
             }
         }
         while (lst.count() > 1) {
@@ -95,23 +95,23 @@ public class Huffman {
     public static String[] createCode(HuffmanTree root) {
         String[] codes = new String[NUM_CHARS];
         Arrays.fill(codes, "");
-        if (root instanceof HuffmanLeaf){
-            ...
+        if (root instanceof HuffmanLeaf) {
+            return codes;
         }
-        pathCodes(root, "", codes);
+        else if (root instanceof HuffmanNode) {
+            pathCodes(root, "", codes);
+        }
         return codes;
     }
 
-    public static String[] pathCodes(HuffmanNode root, String path, String[] codes) {
-        if (root == null) {
-            return null;
+    public static void pathCodes(HuffmanTree root, String path, String[] codes) {
+        if (root instanceof HuffmanLeaf leaf){
+            codes[leaf.charascii()] = path;
         }
-        if (root.left() == null && root.right() == null) {
-            codes[root.charAscii()] = path;
+        else if (root instanceof HuffmanNode node) {
+            pathCodes(node.left(), path + "0", codes);
+            pathCodes(node.right(), path + "1", codes);
         }
-        pathCodes(root.left(), path + "0", codes);
-        pathCodes(root.right(), path + "1", codes);
-        return codes;
     }
 
     /**
@@ -153,7 +153,7 @@ public class Huffman {
         Path path = Path.of(inFile);
         String unCoded = Files.readString(path);
         int[] freq_table = cntFreq(unCoded);
-        HuffmanNode root = createHuffTree(freq_table);
+        HuffmanTree root = createHuffTree(freq_table);
         if (root == null) {
             // write an empty file
         }
@@ -203,6 +203,7 @@ public class Huffman {
      * The header's count alone tells you how many times that character occurred,
      * so write it out that many times directly.
      */
+    /*
     public static void huffmanDecode(String encodedFile, String decodeFile) throws IOException {
         Path path = Path.of(encodedFile);
         String encoded = Files.readString(path);
@@ -217,7 +218,7 @@ public class Huffman {
             }
         } else {
         int[] header = parseHeader(lines[0]); // following lines create the codes
-        HuffmanNode tree = createHuffTree(header);
+        HuffmanTree tree = createHuffTree(header);
         String[] codes = createCode(tree);
         StringBuilder string = new StringBuilder(); // string that is being read
         for (int i = 1; i < lines.length; i += 1) { // excludes header, puts rest of file back together
@@ -225,7 +226,7 @@ public class Huffman {
         }
 
         StringBuilder code = new StringBuilder(); // decoding
-        HuffmanNode spot = tree;
+        HuffmanTree spot = tree;
         for (int i = 0; i < string.length(); i += 1) {
             if (spot.left() == null || spot.right() == null) {
                 try {
@@ -252,6 +253,5 @@ public class Huffman {
             /** files need to be in chunks of 8;
              * we can just decode the length of the original string
              * and then add zeros after */
-        }
-    }
+
 }
