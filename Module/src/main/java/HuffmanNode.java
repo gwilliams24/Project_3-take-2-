@@ -29,7 +29,7 @@ public record HuffmanNode(int charAscii, int freq, HuffmanTree left, HuffmanTree
          return false;
     }
 
-    public HuffmanTree combine(HuffmanTree other) {
+    public HuffmanNode combine(HuffmanTree other) {
         int parentASCII;
         if (this.charAscii() < other.charascii()) {
             parentASCII = this.charascii();

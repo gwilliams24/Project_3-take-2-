@@ -64,7 +64,7 @@ public class Huffman {
      *    one unique character), return a single leaf HuffmanNode for that
      *    character (no combine() call needed).
      */
-    public static HuffmanNode createHuffTree(int[] freq) {
+    public static HuffmanTree createHuffTree(int[] freq) {
         PriorityQueue lst = null;
         for (int i = 0; i < freq.length; i += 1) {
             if (freq[i] > 0) {
@@ -73,9 +73,9 @@ public class Huffman {
             }
         }
         while (lst.count() > 1) {
-            HuffmanNode node1 = lst.dequeue();
-            HuffmanNode node2 = lst.dequeue();
-            lst.enqueue(HuffmanNode.combine(node1, node2));
+            HuffmanTree node1 = lst.dequeue();
+            HuffmanTree node2 = lst.dequeue();
+            lst.enqueue(node1.combine(node2));
         }
         return lst.dequeue();
     }
@@ -95,11 +95,14 @@ public class Huffman {
     public static String[] createCode(HuffmanTree root) {
         String[] codes = new String[NUM_CHARS];
         Arrays.fill(codes, "");
+        if (root instanceof HuffmanLeaf){
+            ...
+        }
         pathCodes(root, "", codes);
         return codes;
     }
 
-    public static String[] pathCodes(HuffmanTree root, String path, String[] codes) {
+    public static String[] pathCodes(HuffmanNode root, String path, String[] codes) {
         if (root == null) {
             return null;
         }

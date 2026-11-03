@@ -25,7 +25,7 @@ public record HuffmanLeaf (int freq, char charASCII) implements HuffmanTree{
 
     // combines two HuffmanTrees into a HuffmanNode
     @Override
-    public HuffmanTree combine(HuffmanTree other) {
+    public HuffmanNode combine(HuffmanTree other) {
         int parentASCII;
         if (this.charASCII < other.charascii()) {
             parentASCII = this.charASCII;
