@@ -203,20 +203,27 @@ public class Huffman {
     public static void huffmanDecode(String encodedFile, String decodeFile) throws IOException {
         Path path = Path.of(encodedFile);
         String encoded = Files.readString(path);
+        FileWriter file = new FileWriter(decodeFile); // file being written to
         String[] lines = encoded.split("\n"); // breaks up header, lines
-
+        if (lines.length == 1) { // in case of single character
+            String[] header = lines[0].split(" ");
+            int count = Integer.parseInt(header[1]);
+            char chr = (char) Integer.parseInt(header[0]);
+            for (int i = 0; i < count; i += 1) {
+                file.write(chr);
+            }
+        } else {
         int[] header = parseHeader(lines[0]); // following lines create the codes
         HuffmanNode tree = createHuffTree(header);
         String[] codes = createCode(tree);
         StringBuilder string = new StringBuilder(); // string that is being read
-        FileWriter file = new FileWriter(decodeFile); // file being written to
         for (int i = 1; i < lines.length; i += 1) { // excludes header, puts rest of file back together
             string.append(lines[i]);
         }
 
         StringBuilder code = new StringBuilder(); // decoding
         HuffmanNode spot = tree;
-        for (int i = 0; i < string.length() - extra; i += 1) {
+        for (int i = 0; i < string.length(); i += 1) {
             if (spot.left() == null || spot.right() == null) {
                 try {
                     String chr = "";
