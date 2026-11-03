@@ -1,4 +1,5 @@
 public interface HuffmanTree extends Comparable<HuffmanTree> {
+
     /**
      * Returns true if the tree rooted at node a comes before the tree
      * rooted at node b, false otherwise.

@@ -65,19 +65,19 @@ public class Huffman {
      *    character (no combine() call needed).
      */
     public static HuffmanNode createHuffTree(int[] freq) {
-        Collection<HuffmanNode> lst = new ArrayList<>();
+        PriorityQueue lst = null;
         for (int i = 0; i < freq.length; i += 1) {
             if (freq[i] > 0) {
                 HuffmanNode node = new HuffmanNode(i, freq[i], null, null);
-                addNode(lst, node);
+                lst.enqueue(node);
             }
         }
-        while (lst.size() > 1) {
-            HuffmanNode node1 = removeMin(lst);
-            HuffmanNode node2 = removeMin(lst);
-            addNode(lst, HuffmanNode.combine(node1, node2));
+        while (lst.count() > 1) {
+            HuffmanNode node1 = lst.dequeue();
+            HuffmanNode node2 = lst.dequeue();
+            lst.enqueue(HuffmanNode.combine(node1, node2));
         }
-        return removeMin(lst);
+        return lst.dequeue();
     }
 
     /**
@@ -99,7 +99,7 @@ public class Huffman {
         return codes;
     }
 
-    public static String[] pathCodes(HuffmanNode root, String path, String[] codes) {
+    public static String[] pathCodes(HuffmanTree root, String path, String[] codes) {
         if (root == null) {
             return null;
         }

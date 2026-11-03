@@ -2,7 +2,7 @@ public record HuffmanLeaf (int freq, char charASCII) implements HuffmanTree{
 
     @Override
     public boolean comesBefore(HuffmanTree other) {
-        if (this.freq < ((HuffmanLeaf)other).freq) {
+        if (this.freq < (other.freq())) {
             return true;
         } else if (this.freq == ((HuffmanLeaf)other).freq) {
             return (this.charASCII < ((HuffmanLeaf)other).charASCII);

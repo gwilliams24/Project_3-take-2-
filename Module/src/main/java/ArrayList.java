@@ -1,4 +1,4 @@
-public class ArrayList <T> implements HQueue {
+public class ArrayList <T> {
     T[] array;
     int size;
 
@@ -10,7 +10,7 @@ public class ArrayList <T> implements HQueue {
     public boolean equals(Object other) {
         switch (other) {
             case ArrayList array_other:
-                if ((this.size != array_other.size) || (this.array.length != array_other.array.length)){
+                if ((this.size != array_other.size) || (this.array.length != array_other.array.length)) {
                     return false;
                 }
                 for (int i = 0; i < this.array.length; i += 1) {
@@ -20,23 +20,7 @@ public class ArrayList <T> implements HQueue {
                 }
                 return true;
             case null, default:
-                return false;}
-
-        public static void addNode(ArrayList<HuffmanNode> collection, HuffmanNode node) {
-            if (collection.size == 0) {
-                collection.array[1] = node;
-                collection.size += 1;
-            }else{
-                int childIdx = collection.size + 1;
-                int parentIdx = (collection.size + 1)/2;
-                while(HuffmanNode.comesBefore(collection.array[childIdx], collection.array[parentIdx]) && childIdx > 1) {
-                    HuffmanNode parent_temp = collection.array[parentIdx];
-                    collection.array[parentIdx] = collection.array[childIdx];
-                    collection.array[childIdx] = parent_temp;
-
-                    childIdx = parentIdx;
-                    parentIdx = childIdx/2;
-                    collection.size += 1;
-                }
-            }
+                return false;
+        }
     }
+}
