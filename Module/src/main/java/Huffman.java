@@ -129,7 +129,7 @@ public class Huffman {
                 header.append(i).append(" ").append(freq[i]).append(" ");
             }
         }
-        if (header.length() > 0) {
+        if (!header.isEmpty()) {
             int end = header.length() - 1;
             header.deleteCharAt(end);
         }
@@ -150,20 +150,29 @@ public class Huffman {
      *    header line (e.g. "97 5") and nothing else - no second line of code bits.
      */
     public static void huffmanEncode(String inFile, String outFile) throws IOException {
-        Path path = Path.of(inFile);
-        String unCoded = Files.readString(path);
-        int[] freq_table = cntFreq(unCoded);
-        HuffmanTree root = createHuffTree(freq_table);
-        if (root == null) {
-            // write an empty file
-        }
-        String[] codes = createCode(root);
-        String header = createHeader(freq_table);
-        FileWriter file = new FileWriter(outFile);
-        StringBuilder code = new StringBuilder();
-        code.append(header + "\n");
-        for (int i = 0; i < codes.length; i += 1) {
+        int[] freq = cntFreq(inFile);
+        HuffmanTree root = createHuffTree(freq);
+        BufferedWriter writer = new BufferedWriter(new FileWriter(outFile, true));
 
+        if (root == null) {
+            String header = createHeader(freq);
+            if (!header.isEmpty());
+            writer.write(header + "\n");
+
+        } else {
+            String[] codes = createCode(root);
+            String header = createHeader(freq);
+            writer.write(header + "\n");
+            try {
+                FileReader fileReader = new FileReader(inFile);
+                int i;
+                while ((i = fileReader.read()) != -1) {
+                    writer.write(codes[i]);
+                }
+                fileReader.close();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
     }
 
@@ -203,49 +212,50 @@ public class Huffman {
      * The header's count alone tells you how many times that character occurred,
      * so write it out that many times directly.
      */
-    /*
+
     public static void huffmanDecode(String encodedFile, String decodeFile) throws IOException {
         Path path = Path.of(encodedFile);
         String encoded = Files.readString(path);
-        FileWriter file = new FileWriter(decodeFile); // file being written to
+        BufferedWriter writer = new BufferedWriter(new FileWriter(decodeFile, true)); // file being written to
         String[] lines = encoded.split("\n"); // breaks up header, lines
+
         if (lines.length == 1) { // in case of single character
             String[] header = lines[0].split(" ");
             int count = Integer.parseInt(header[1]);
             char chr = (char) Integer.parseInt(header[0]);
             for (int i = 0; i < count; i += 1) {
-                file.write(chr);
+                writer.write(chr);
             }
-        } else {
-        int[] header = parseHeader(lines[0]); // following lines create the codes
-        HuffmanTree tree = createHuffTree(header);
-        String[] codes = createCode(tree);
-        StringBuilder string = new StringBuilder(); // string that is being read
-        for (int i = 1; i < lines.length; i += 1) { // excludes header, puts rest of file back together
-            string.append(lines[i]);
-        }
 
-        StringBuilder code = new StringBuilder(); // decoding
-        HuffmanTree spot = tree;
-        for (int i = 0; i < string.length(); i += 1) {
-            if (spot.left() == null || spot.right() == null) {
-                try {
-                    String chr = "";
-                    for (i = 0; i < codes.length; i += 1) {
-                        if (code.equals(codes[i])) {
-                            chr = String.valueOf((char) i);
+        } else {
+            int[] header = parseHeader(lines[0]); // following lines create the codes
+            HuffmanTree tree = createHuffTree(header);
+            String[] codes = createCode(tree);
+            StringBuilder string = new StringBuilder(); // string that is being read
+            for (int i = 1; i < lines.length; i += 1) { // excludes header, puts rest of file back together
+                string.append(lines[i]);
+            }
+            StringBuilder code = new StringBuilder(); // decoding
+            HuffmanTree spot = tree;
+            for (int i = 0; i < string.length(); i += 1) {
+                if (spot instanceof HuffmanLeaf) {
+                    try {
+                        String codeString = code.toString();
+                        for (i = 0; i < codes.length; i += 1) {
+                            if (codeString.equals(codes[i])) {
+                                writer.write(String.valueOf((char) i));
+                                break;
+                            }
                         }
+                        code = new StringBuilder();
+                    } catch (IOException e) {
+                        System.out.println("An error occurred: " + e.getMessage());
                     }
-                    file.write(chr);
-                    code = new StringBuilder();
-                } catch (IOException e) {
-                    System.out.println("An error occurred: " + e.getMessage());
-                }
-                if (string.charAt(i) == 0) {
-                    spot = spot.left();
+                } else if (string.charAt(i) == 0) {
+                    spot = ((HuffmanNode) spot).left();
                     code.append(0);
                 } else {
-                    spot = spot.right();
+                    spot = ((HuffmanNode) spot).right();
                     code.append(1);
                 }
             }
@@ -253,5 +263,6 @@ public class Huffman {
             /** files need to be in chunks of 8;
              * we can just decode the length of the original string
              * and then add zeros after */
-
+        }
+    }
 }
