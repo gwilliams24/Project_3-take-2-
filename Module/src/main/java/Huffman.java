@@ -241,10 +241,8 @@ public class Huffman {
             int[] header = parseHeader(lines[0]); // following lines create the codes
             HuffmanTree tree = createHuffTree(header);
             String[] codes = createCode(tree);
-            StringBuilder string = new StringBuilder(); // string that is being read
-            for (int i = 1; i < lines.length; i += 1) { // excludes header, puts rest of file back together
-                string.append(lines[i]);
-            }
+            StringBuilder string = new StringBuilder(lines[1]); // string that is being read
+
             StringBuilder code = new StringBuilder(); // decoding
             HuffmanTree spot = tree;
             for (int i = 0; i < string.length(); i += 1) {
@@ -258,6 +256,7 @@ public class Huffman {
                         }
                         writer.close();
                         code = new StringBuilder();
+                        spot = tree;
                     } catch (IOException e) {
                         System.out.println("An error occurred: " + e.getMessage());
                     }
