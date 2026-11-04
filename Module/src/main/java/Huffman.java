@@ -158,24 +158,27 @@ public class Huffman {
     public static void huffmanEncode(String inFile, String outFile) throws IOException {
         int[] freq = cntFreq(inFile);
         HuffmanTree root = createHuffTree(freq);
-        BufferedWriter writer = new BufferedWriter(new FileWriter(outFile, true));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 
         if (root == null) {
             String header = createHeader(freq);
-            if (!header.isEmpty());
-            writer.write(header + "\n");
+            if (!header.isEmpty()) {
+                writer.write(header + "\n");
+            }
+            writer.close();
 
         } else {
             String[] codes = createCode(root);
             String header = createHeader(freq);
             writer.write(header + "\n");
             try {
-                FileReader fileReader = new FileReader(inFile);
+                FileReader reader = new FileReader(inFile);
                 int i;
-                while ((i = fileReader.read()) != -1) {
+                while ((i = reader.read()) != -1) {
                     writer.write(codes[i]);
                 }
-                fileReader.close();
+                reader.close();
+                writer.close();
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -222,7 +225,7 @@ public class Huffman {
     public static void huffmanDecode(String encodedFile, String decodeFile) throws IOException {
         Path path = Path.of(encodedFile);
         String encoded = Files.readString(path);
-        BufferedWriter writer = new BufferedWriter(new FileWriter(decodeFile, true)); // file being written to
+        BufferedWriter writer = new BufferedWriter(new FileWriter(decodeFile)); // file being written to
         String[] lines = encoded.split("\n"); // breaks up header, lines
 
         if (lines.length == 1) { // in case of single character
@@ -232,6 +235,7 @@ public class Huffman {
             for (int i = 0; i < count; i += 1) {
                 writer.write(chr);
             }
+            writer.close();
 
         } else {
             int[] header = parseHeader(lines[0]); // following lines create the codes
@@ -250,9 +254,9 @@ public class Huffman {
                         for (i = 0; i < codes.length; i += 1) {
                             if (codeString.equals(codes[i])) {
                                 writer.write(String.valueOf((char) i));
-                                break;
                             }
                         }
+                        writer.close();
                         code = new StringBuilder();
                     } catch (IOException e) {
                         System.out.println("An error occurred: " + e.getMessage());
