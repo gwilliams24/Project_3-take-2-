@@ -17,14 +17,15 @@ public record PriorityQueue(ArrayLst<HuffmanTree> collection) implements HQueue{
             collection.size += 1;
         } else {
             int childIdx = collection.size + 1;
-            int parentIdx = (collection.size + 1) / 2;
-            while (collection.array[childIdx].comesBefore(collection.array[parentIdx]) && childIdx > 1) {
+            int parentIdx = childIdx / 2;
+            collection.array[childIdx] = node;
+            collection.size += 1;
+            while (childIdx > 1 && collection.array[childIdx].comesBefore(collection.array[parentIdx])) {
                 HuffmanTree parent_temp = collection.array[parentIdx];
                 collection.array[parentIdx] = collection.array[childIdx];
                 collection.array[childIdx] = parent_temp;
                 childIdx = parentIdx;
                 parentIdx = childIdx / 2;
-                collection.size += 1;
             }
         }
     }
@@ -38,8 +39,8 @@ public record PriorityQueue(ArrayLst<HuffmanTree> collection) implements HQueue{
         collection.size -= 1;
         while(parentIdx * 2 <= collection.size) {
             int childIdx = parentIdx * 2;
-            if (collection.array[childIdx + 1] != null && collection.array[childIdx + 1].comesBefore(collection.array[childIdx])) {
-                childIdx = childIdx + 1;
+            if (childIdx + 1 <= collection.size && collection.array[childIdx + 1].comesBefore(collection.array[childIdx])) {
+                childIdx += 1;
             }
             if (collection.array[childIdx].comesBefore(collection.array[parentIdx])) {
                 HuffmanTree parent_temp = collection.array[parentIdx];

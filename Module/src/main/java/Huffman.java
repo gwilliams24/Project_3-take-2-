@@ -72,6 +72,12 @@ public class Huffman {
                 lst.enqueue(new HuffmanLeaf(freq[i], (char) i));
             }
         }
+        if(lst.count() == 0){
+            return null;
+        } else if (lst.count() == 1){
+            HuffmanTree single_node = lst.dequeue();
+            return new HuffmanLeaf(single_node.frequency(), (char) single_node.charascii());
+        }
         while (lst.count() > 1) {
             HuffmanTree node1 = lst.dequeue();
             HuffmanTree node2 = lst.dequeue();
