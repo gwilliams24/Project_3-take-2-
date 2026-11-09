@@ -249,9 +249,9 @@ public class Huffman {
                 if (spot instanceof HuffmanLeaf) {
                     try {
                         String codeString = code.toString();
-                        for (i = 0; i < codes.length; i += 1) {
-                            if (codeString.equals(codes[i])) {
-                                writer.write(String.valueOf((char) i));
+                        for (int j = 0; j < codes.length; j += 1) {
+                            if (codeString.equals(codes[j])) {
+                                writer.write(String.valueOf((char) j));
                             }
                         }
                         writer.close();
@@ -260,7 +260,7 @@ public class Huffman {
                     } catch (IOException e) {
                         System.out.println("An error occurred: " + e.getMessage());
                     }
-                } else if (string.charAt(i) == 0) {
+                } else if (string.charAt(i) == '0') {
                     spot = ((HuffmanNode) spot).left();
                     code.append(0);
                 } else {
@@ -272,6 +272,46 @@ public class Huffman {
             /** files need to be in chunks of 8;
              * we can just decode the length of the original string
              * and then add zeros after */
+        }
+    }
+
+    public static void huffmanDecode2(String encodedFile, String decodeFile) throws IOException {
+        Path path = Path.of(encodedFile);
+        String encoded = Files.readString(path);
+        BufferedWriter writer = new BufferedWriter(new FileWriter(decodeFile)); // file being written to
+        String[] lines = encoded.split("\n"); // breaks up header, lines
+
+        if (lines.length == 1) { // in case of single character
+            String[] header = lines[0].split(" ");
+            int count = Integer.parseInt(header[1]);
+            char chr = (char) Integer.parseInt(header[0]);
+            for (int i = 0; i < count; i += 1) {
+                writer.write(chr);
+            }
+            writer.close();
+
+        } else {
+            int[] header = parseHeader(lines[0]); // following lines create the codes
+            HuffmanTree tree = createHuffTree(header);
+            String[] codes = createCode(tree);
+            StringBuilder string = new StringBuilder(lines[1]); // string that is being read
+
+            StringBuilder code = new StringBuilder(); // decoding
+            HuffmanTree spot = tree;
+            for (int i = 0; i < string.length(); i += 1) {
+                if (string.charAt(i) == '0') {
+                    spot = ((HuffmanNode) spot).left();
+                    code.append(0);
+                } else {
+                    spot = ((HuffmanNode) spot).right();
+                    code.append(1);
+                }
+                if (spot instanceof HuffmanLeaf leaf) {
+                    writer.write(leaf.charASCII());
+                    spot = tree;
+                }
+            }
+            writer.close();
         }
     }
 }
