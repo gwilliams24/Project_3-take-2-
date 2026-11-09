@@ -38,6 +38,7 @@ public class Huffman {
      * Returns an int array of size NUM_CHARS, indexed by ASCII value, with
      * the count of each character (0 for characters that do not occur).
      */
+    // create a table of the frequencies of each character in the file
     public static int[] cntFreq(String filename) throws IOException {
         int[] freq = new int[NUM_CHARS];
         try {
@@ -67,6 +68,7 @@ public class Huffman {
      * one unique character), return a single leaf HuffmanNode for that
      * character (no combine() call needed).
      */
+    // create a HuffmanTree from the frequency table
     public static HuffmanTree createHuffTree(int[] freq) {
         PriorityQueue lst = new PriorityQueue(new ArrayLst<HuffmanTree>(new HuffmanTree[257], 0));
         for (int i = 0; i < freq.length; i += 1) {
@@ -100,6 +102,7 @@ public class Huffman {
      * left/right branch to build a code out of; huffmanEncode/huffmanDecode
      * handle that case entirely through the header.
      */
+    // create a table of the codes that are assigned to each character in the file
     public static String[] createCode(HuffmanTree root) {
         String[] codes = new String[NUM_CHARS];
         Arrays.fill(codes, "");
@@ -128,6 +131,7 @@ public class Huffman {
      * <p>
      * Example: for the text "aaabbbbcc" this returns "97 3 98 4 99 2".
      */
+    // create the header for the encoded file
     public static String createHeader(int[] freq) {
         StringBuilder header = new StringBuilder();
         for (int i = 0; i < freq.length; i += 1) {
@@ -155,6 +159,7 @@ public class Huffman {
      * - Input file with only one unique character: should contain only the
      * header line (e.g. "97 5") and nothing else - no second line of code bits.
      */
+    // encode the file
     public static void huffmanEncode(String inFile, String outFile) throws IOException {
         int[] freq = cntFreq(inFile);
         HuffmanTree root = createHuffTree(freq);
@@ -188,6 +193,7 @@ public class Huffman {
      * <p>
      * Example: for the header "97 3 98 4 99 2", freq[97, 98, 99] == {3, 4, 2}.
      */
+    // decode the header from the encoded file
     public static int[] parseHeader(String headerString) {
         int[] freq = new int[NUM_CHARS];
         String[] header_array = headerString.split(" ");
@@ -215,6 +221,7 @@ public class Huffman {
      * so write it out that many times directly.
      */
 
+    // decode the Huffman encoded file
     public static void huffmanDecode(String encodedFile, String decodeFile) throws IOException {
         Path path = Path.of(encodedFile);
         String encoded = Files.readString(path);

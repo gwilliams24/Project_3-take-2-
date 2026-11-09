@@ -7,6 +7,7 @@ public class ArrayLst<T> {
         this.size = size;
     }
 
+    // equals method for ArrayLists:
     public boolean equals(Object other) {
         switch (other) {
             case ArrayLst array_other:

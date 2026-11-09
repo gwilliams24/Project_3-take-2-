@@ -53,6 +53,11 @@ public class HuffmanNodeTest {
                 new HuffmanNode(' ', 6,  new HuffmanLeaf(3, ' '), new HuffmanLeaf(3, 'b')).combine(new HuffmanNode('a', 7, new HuffmanNode('c', 3, new HuffmanLeaf(1, 'd'), new HuffmanLeaf(2, 'c')), new HuffmanLeaf(4, 'a'))));
     }
 
+    @Test
+    void combine_3(){
+        assertEquals(new HuffmanNode(' ' ,5, new HuffmanLeaf(2, ' '), new HuffmanNode('a', 3, new HuffmanLeaf(1, 'a'), new HuffmanLeaf(2, 'b'))),new HuffmanNode('a', 3, new HuffmanLeaf(1, 'a'), new HuffmanLeaf(2, 'b')).combine(new HuffmanLeaf(2, ' ')));
+    }
+
 
     // tests for compare to:
     @Test
