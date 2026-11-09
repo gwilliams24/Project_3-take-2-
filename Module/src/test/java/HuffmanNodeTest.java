@@ -40,5 +40,39 @@ public class HuffmanNodeTest {
 
 
     // tests for combine:
+    @Test
+    void combine_1(){
+        assertEquals((new HuffmanNode('a', 7, new HuffmanNode('c', 3, new HuffmanLeaf(1, 'd'), new HuffmanLeaf(2, 'c')), new HuffmanLeaf(4, 'a'))),
+                new HuffmanNode('c', 3, new HuffmanLeaf(1, 'd'), new HuffmanLeaf(2, 'c')).combine(new HuffmanLeaf(4, 'a')));
+    }
 
+    @Test
+    void combine_2(){
+        assertEquals(new HuffmanNode(' ', 13, new HuffmanNode(' ', 6,  new HuffmanLeaf(3, ' '), new HuffmanLeaf(3, 'b')),
+                new HuffmanNode('a', 7, new HuffmanNode('c', 3, new HuffmanLeaf(1, 'd'), new HuffmanLeaf(2, 'c')), new HuffmanLeaf(4, 'a'))),
+                new HuffmanNode(' ', 6,  new HuffmanLeaf(3, ' '), new HuffmanLeaf(3, 'b')).combine(new HuffmanNode('a', 7, new HuffmanNode('c', 3, new HuffmanLeaf(1, 'd'), new HuffmanLeaf(2, 'c')), new HuffmanLeaf(4, 'a'))));
+    }
+
+    @Test
+    void combine_3(){
+        assertEquals(new HuffmanNode(' ' ,5, new HuffmanLeaf(2, ' '), new HuffmanNode('a', 3, new HuffmanLeaf(1, 'a'), new HuffmanLeaf(2, 'b'))),new HuffmanNode('a', 3, new HuffmanLeaf(1, 'a'), new HuffmanLeaf(2, 'b')).combine(new HuffmanLeaf(2, ' ')));
+    }
+
+
+    // tests for compare to:
+    @Test
+    void compareTo1(){
+        assertEquals(0, new HuffmanNode('d', 4, new HuffmanLeaf(1, 'd'), new HuffmanLeaf(3, 'a')).compareTo(new HuffmanNode('d', 4, new HuffmanLeaf(1, 'd'), new HuffmanLeaf(3, 'a'))));
+    }
+
+    @Test
+    void compareTo2(){
+        assertEquals(-1, new HuffmanNode('d', 4, new HuffmanLeaf(1, 'd'), new HuffmanLeaf(3, 'a')).compareTo(new HuffmanNode('d', 6, new HuffmanLeaf(2, 'd'), new HuffmanLeaf(4, 'a'))));
+    }
+
+
+    @Test
+    void compareTo3(){
+        assertEquals(1, new HuffmanNode('d', 4, new HuffmanLeaf(1, 'd'), new HuffmanLeaf(3, 'a')).compareTo(new HuffmanLeaf(0, 'l')));
+    }
 }
