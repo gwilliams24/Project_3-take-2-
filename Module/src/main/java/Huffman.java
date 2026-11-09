@@ -161,10 +161,6 @@ public class Huffman {
         BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 
         if (root == null) {
-            String header = createHeader(freq);
-            if (!header.isEmpty()) {
-                writer.write(header + "\n");
-            }
             writer.close();
 
         } else {
@@ -194,9 +190,6 @@ public class Huffman {
      */
     public static int[] parseHeader(String headerString) {
         int[] freq = new int[NUM_CHARS];
-        if (headerString == null) {
-            return freq;
-        }
         String[] header_array = headerString.split(" ");
         for (int i = 0; i < header_array.length; i += 2) {
             int ascii = Integer.parseInt(header_array[i]);
