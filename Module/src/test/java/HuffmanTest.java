@@ -76,6 +76,24 @@ public class HuffmanTest {
         assertTrue(compareFiles("src/test/java/file1_in.txt", "src/test/java/file1.txt"));
     }
 
+    @Test
+    public void test07Textfile() throws IOException {
+        Huffman.huffmanDecode("src/test/java/file2_soln.txt", "src/test/java/file2_in.txt");
+        assertTrue(compareFiles("src/test/java/file2_in.txt", "src/test/java/file2.txt"));
+    }
+
+    @Test
+    public void test08Textfile() throws IOException {
+        Huffman.huffmanDecode("src/test/java/file3_soln.txt", "src/test/java/file3_in.txt");
+        assertTrue(compareFiles("src/test/java/file3_in.txt", "src/test/java/file3.txt"));
+    }
+
+    @Test
+    public void test09Textfile() throws IOException {
+        Huffman.huffmanDecode("src/test/java/file4_soln.txt", "src/test/java/file4_in.txt");
+        assertTrue(compareFiles("src/test/java/file4_in.txt", "src/test/java/file4.txt"));
+    }
+
     /**
      * Compares two files line by line, trimming trailing CR/LF so the
      * comparison works the same on Windows and Unix-style line endings.
