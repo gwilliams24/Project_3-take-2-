@@ -17,7 +17,7 @@ public record HuffmanNode(int charAscii, int freq, HuffmanTree left, HuffmanTree
         return this.freq;
     }
 
-    // returns the Ascii integer value of the HuffmanNode
+    // returns the ascii integer value of the HuffmanNode
     public int charascii(){
         return this.charAscii;
     }

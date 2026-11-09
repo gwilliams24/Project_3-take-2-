@@ -22,18 +22,18 @@ Day 4: Monday, November 2 (12:00-1:00 pm) and then (2:00-4:00 pm)
 HuffmanLeaves and HuffmanNodes
 - created Priority Queue functions encode and decode with minheap
 
-Day 5: Wednesday, November 4
+Day 5: Wednesday, November 4 (4:00-5:00)
 - adapted huffman methods (createHuffTree, createCode, huffmanEncode)
 to be used with HuffmanLeaves and HuffmanNodes
 
-Day 6: Friday, November 6
+Day 6: Friday, November 6 (2:00-2:45)
 - worked on encode and decode functions
 
-Day 7: Sunday, November 8
+Day 7: Sunday, November 8 (8:00-9:00)
 - added to test cases for HuffmanLeaf, HuffmanNode and Priority Queue
 (to get 100% coverage)
 - edited decode
 
-Day 8: Monday, November 9
+Day 8: Monday, November 9 (2:00-3:30)
 - more test cases
 

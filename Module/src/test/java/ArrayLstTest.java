@@ -4,14 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ArrayLstTest {
-    ArrayLst<T> list1 = new ArrayLst(new T[4], 0);
-    ArrayLst list3 = new ArrayLst(new int[4], 0);
-    ArrayLst list4 = new ArrayLst(new int[]{10, 20, 30, 40, 0, 0, 0, 0}, 4);
-    ArrayLst list5 = new ArrayLst(new int[]{10, 20, 30, 40}, 4);
-    ArrayLst list6 = new ArrayLst(new int[]{10, 20, 30, 50}, 4);
-    ArrayLst list7 = new ArrayLst(new int[0], 0);
-    ArrayLst list8 = new ArrayLst(new int[]{0, 0, 0}, 0);
-    ArrayLst list9 = new ArrayLst(new int[3], 0);
+    ArrayLst<Integer> list1 = new ArrayLst<>(new Integer[4], 0);
+    ArrayLst<Integer> list3 = new ArrayLst<>(new Integer[4], 0);
+    ArrayLst<Integer> list4 = new ArrayLst<>(new Integer[]{10, 20, 30, 40, 0, 0, 0, 0}, 4);
+    ArrayLst<Integer> list5 = new ArrayLst<>(new Integer[]{10, 20, 30, 40}, 4);
+    ArrayLst<Integer> list6 = new ArrayLst<>(new Integer[]{10, 20, 30, 50}, 4);
+    ArrayLst<Integer> list7 = new ArrayLst<>(new Integer[0], 0);
+    ArrayLst<Integer> list8 = new ArrayLst<>(new Integer[]{0, 0, 0}, 1);
+    ArrayLst<Integer> list9 = new ArrayLst<>(new Integer[3], 0);
+    ArrayLst<Integer> list10 = new ArrayLst<>(new Integer[]{10, 20, 30, 40}, 4);
 
 
     // Tests for equals method (exactly same ArrayLst and array length)
@@ -36,7 +37,15 @@ public class ArrayLstTest {
     }
 
     @Test
-    void equals_5() {
-        assertEquals(list8, list9);
-    }
+    void equals_5(){assertNotEquals(list9, null);}
+
+    @Test
+    void equals_6(){assertNotEquals(list9, 9);}
+
+    @Test
+    void equals_7(){assertEquals(list10, list5);}
+
+    @Test
+    void equals_8(){assertNotEquals(list8, list9);}
 }
+

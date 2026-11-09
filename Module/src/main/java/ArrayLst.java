@@ -7,10 +7,10 @@ public class ArrayLst<T> {
         this.size = size;
     }
 
-    // equals method for ArrayLists:
+    // equals method for ArrayLst, returns true if ArrayLsts are exactly the same
     public boolean equals(Object other) {
         switch (other) {
-            case ArrayLst array_other:
+            case ArrayLst<?> array_other:
                 if ((this.size != array_other.size) || (this.array.length != array_other.array.length)) {
                     return false;
                 }

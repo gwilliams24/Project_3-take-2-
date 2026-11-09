@@ -5,7 +5,7 @@ public record HuffmanLeaf (int freq, char charASCII) implements HuffmanTree{
         return this.freq;
     }
 
-    // returns the Ascii integer value of the HuffmanLeaf
+    // returns the ascii integer value of the HuffmanLeaf
     public int charascii(){
         return charASCII;
     }
