@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,6 +93,18 @@ public class HuffmanTest {
     public void test09Textfile() throws IOException {
         Huffman.huffmanDecode("src/test/java/file4_soln.txt", "src/test/java/file4_in.txt");
         assertTrue(compareFiles("src/test/java/file4_in.txt", "src/test/java/file4.txt"));
+    }
+
+    @Test
+    public void test01FileNotFound() {
+        assertThrows(FileNotFoundException.class,
+                () -> Huffman.cntFreq("src/test/java/file45.txt"));
+    }
+
+    @Test
+    public void test02FileNotFound() {
+        assertThrows(FileNotFoundException.class,
+                () -> Huffman.huffmanEncode("src/test/java/file27.txt", "src/test/java/file27_soln.txt"));
     }
 
     /**

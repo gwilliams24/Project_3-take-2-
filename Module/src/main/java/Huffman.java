@@ -49,7 +49,7 @@ public class Huffman {
             }
             fileReader.close();
         } catch (Exception e) {
-            System.out.println(e);
+            throw new FileNotFoundException();
         }
         return freq;
     }
@@ -108,7 +108,7 @@ public class Huffman {
         Arrays.fill(codes, "");
         if (root instanceof HuffmanLeaf) {
             return codes;
-        } else if (root instanceof HuffmanNode) {
+        } else {
             pathCodes(root, "", codes);
         }
         return codes;
@@ -164,26 +164,16 @@ public class Huffman {
         int[] freq = cntFreq(inFile);
         HuffmanTree root = createHuffTree(freq);
         BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
-
-        if (root == null) {
-            writer.close();
-
-        } else {
-            String[] codes = createCode(root);
-            String header = createHeader(freq);
-            writer.write(header + "\n");
-            try {
-                FileReader reader = new FileReader(inFile);
-                int i;
-                while ((i = reader.read()) != -1) {
-                    writer.write(codes[i]);
-                }
-                reader.close();
-                writer.close();
-            } catch (Exception e) {
-                System.out.println(e);
-            }
+        String[] codes = createCode(root);
+        String header = createHeader(freq);
+        writer.write(header + "\n");
+        FileReader reader = new FileReader(inFile);
+        int i;
+        while ((i = reader.read()) != -1) {
+            writer.write(codes[i]);
         }
+        reader.close();
+        writer.close();
     }
 
     /**
@@ -227,7 +217,7 @@ public class Huffman {
         String encoded = Files.readString(path);
         BufferedWriter writer = new BufferedWriter(new FileWriter(decodeFile)); // file being written to
 
-        if (encoded.equals("")) {
+        if (encoded.equals("\n")) {
             writer.close();
         } else {
             String[] lines = encoded.split("\n"); // breaks up header, code line
