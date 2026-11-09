@@ -72,7 +72,7 @@ public class HuffmanTest {
     // huffmanDecode tests
     @Test
     public void test06Textfile() throws IOException {
-        Huffman.huffmanDecode2("src/test/java/file1_soln.txt", "src/test/java/file1_in.txt");
+        Huffman.huffmanDecode("src/test/java/file1_soln.txt", "src/test/java/file1_in.txt");
         assertTrue(compareFiles("src/test/java/file1_in.txt", "src/test/java/file1.txt"));
     }
 
